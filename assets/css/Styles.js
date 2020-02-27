@@ -36,10 +36,10 @@ export const styles = StyleSheet.create({
 
   text: {
    
-    fontSize : 20,
+    fontSize : 25,
     textDecorationLine : "underline",
     textAlign: "center", 
-    color : 'red',
+    color : '#e85050',
     fontWeight :'bold'
 },
 
@@ -89,7 +89,14 @@ viewPokemons: {
 
   star:{
     width: 30,
-    height : 30
+    height : 30,
+  },
+
+  pokeball:{
+    width: 30,
+    height : 30,
+
+  
   },
 
   textPrincipal:{

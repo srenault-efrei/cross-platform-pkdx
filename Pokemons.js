@@ -66,7 +66,7 @@ export default class Pokemons extends React.Component {
                    
                         {pokemons.map((pokemon,i) => (
                              <View key={i}  style={styles.viewPokemons}>
-                            {/* <Image style={styles.star} source={require('./assets/img/emptyStar.png')} /> */}
+                            <Image style={styles.pokeball} source={require('./assets/img/pokeball.png')} />
                             <Text style={styles.text} onPress={()=>navigation.navigate('Profile',{name : pokemon.name})} > {pokemon.name}</Text>
                             {/* <TouchableOpacity onPress={(e) => {this.addWishlist(e, i)}} >
                             {this.state.clickedId == i ? <Image    style={styles.star} source={test} /> : <Image    style={styles.star} source={test2} />}

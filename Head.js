@@ -28,7 +28,7 @@ export default class Head extends React.Component {
                 />}
             centerComponent={{ text: 'POKEDEX', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
             containerStyle={{
-                backgroundColor: 'red',
+                backgroundColor: '#e85050',
               }}
           />
         );
