@@ -10,6 +10,7 @@ import Pokedex from './Pokemons';
 import Profile from './Profile';
 import Wishlist from './Wishlist';
 
+import { AsyncStorage } from 'react-native';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -18,6 +19,8 @@ const Tab = createBottomTabNavigator();
 
 export default class App extends React.Component {
 
+
+  
   pokedexScreen(){
     return (
       
@@ -30,6 +33,9 @@ export default class App extends React.Component {
         </Stack.Navigator>
     );
   }
+
+ 
+
 
  connexionScreen(){
     return (
@@ -48,7 +54,7 @@ export default class App extends React.Component {
         <Drawer.Navigator initialRouteName='Pokedex'>
           <Drawer.Screen name='Pokedex' children={this.pokedexScreen} />
           <Drawer.Screen name='Connexion' children={this.connexionScreen} />
-          <Drawer.Screen name='Wishlist' component={Wishlist} />
+          <Stack.Screen name='Wishlist' component={Wishlist} />
         </Drawer.Navigator>
       </NavigationContainer>
     );

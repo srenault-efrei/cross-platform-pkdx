@@ -16,6 +16,7 @@ export default class Profile extends React.Component {
             types: {},
             clickFav: false,
             detailsPokemonFav: [],
+            user: [],
 
         }
         this._isMounted = false;
@@ -80,7 +81,7 @@ export default class Profile extends React.Component {
 
 
         try {
-            AsyncStorage.multiGet(["detailsPokemonFav", "clickFav"]).then(response => {
+            AsyncStorage.multiGet(["detailsPokemonFav", "user"]).then(response => {
 
                 if (response[0][1] !== null) {
                     this.setState({
@@ -88,13 +89,13 @@ export default class Profile extends React.Component {
 
                     })
                 }
-                // if (response[1][1] != null) {
-                //     this.setState({
-                //         clickFav: response[1][1],
-
-                //     })
-                //     console.log(response[1][1])
-                // }
+                if (response[1][1] != null) {
+                    this.setState({
+                        user: JSON.parse(response[1][1]),
+                    
+                    })
+                  
+                }
             }
             )
         } catch (error) {
@@ -119,7 +120,7 @@ export default class Profile extends React.Component {
 
     render() {
 
-        const { name, detailsPokemon, sprites, type, detailsPokemonFav } = this.state
+        const { name, detailsPokemon, sprites, type, detailsPokemonFav,user } = this.state
 
         const imageFavEmptyStar = require('./assets/img/emptyStar.png');
         const imageFavStar = require('./assets/img/star.png');
@@ -130,6 +131,7 @@ export default class Profile extends React.Component {
         const navigation = this.props.navigation
 
         console.log(detailsPokemonFav)
+        console.log(user.uid)
 
         return (
 
@@ -145,9 +147,10 @@ export default class Profile extends React.Component {
 
 
                     <Text style={styles.categorie}>{name}
-                        <TouchableOpacity onPress={this.addWishlist}  >
-                            {this.state.clickFav == false ? <Image style={styles.star} source={imageFavEmptyStar} /> : <Image style={styles.star} source={imageFavStar} />}
-                        </TouchableOpacity>
+
+                        {user.uid != null ? <TouchableOpacity onPress={this.addWishlist}  >{this.state.clickFav == false ? <Image style={styles.star} source={imageFavEmptyStar} /> : <Image style={styles.star} source={imageFavStar} />}</TouchableOpacity>
+                                          :  <TouchableOpacity></TouchableOpacity>
+                        }
                     </Text>
 
                 </View>
