@@ -1,17 +1,33 @@
 import React from 'react';
-import { View, Button, Text, TextInput } from 'react-native';
+import { View, Button, Text, TextInput,TouchableOpacity,Alert } from 'react-native';
 import { styles } from './assets/css/Styles'
+import Firebase from './Firebase'
 
 
-export default class Connexion extends React.Component {
+
+export default class Inscription extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-
+            login: '',
+            password: '',
         }
     }
 
+    SignUp = (email, password) => {
+        try {
+            Firebase
+              .auth()
+              .createUserWithEmailAndPassword(email, password)
+              .then(user => { 
+                     console.log(user);
+               });
+               alert('inscription reussi')
+    } catch (error) {
+          console.log(error.toString(error));
+        }
+      };
 
     render() {
         const { navigation } = this.props
@@ -19,20 +35,26 @@ export default class Connexion extends React.Component {
         return (
             <View style={styles.container}>
                 <TextInput
+                    onChangeText={login => this.setState({ login })}
                     style={styles.inputStyle}
                     placeholder='Login'
                     placeholderStye
                 >
                 </TextInput>
                 <TextInput
+                   onChangeText={password => this.setState({ password })}
                     style={styles.inputStyle}
+                    secureTextEntry={true}
                     placeholder='Mot de passe'
                 >
                 </TextInput>
 
-                <Button title="S'inscrire"></Button>
+                <TouchableOpacity style={styles.buttonStyle}>
+                <Button title="S'inscrire" onPress={() => this.SignUp(this.state.login, this.state.password)} ></Button>
+                </TouchableOpacity>
+                
                 <Button title="Deja un compte"
-                onPress={() => navigation.navigate('Connexion')}
+                    onPress={() => navigation.navigate('Connexion')}
                 ></Button>
 
             </View>

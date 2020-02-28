@@ -20,9 +20,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
   },
 
-  header : {
-    backgroundColor : 'red',
-  },
+ 
 
   containerSafe : {
     flex: 1,
@@ -37,7 +35,6 @@ export const styles = StyleSheet.create({
   text: {
    
     fontSize : 25,
-    textDecorationLine : "underline",
     textAlign: "center", 
     color : '#e85050',
     fontWeight :'bold'
@@ -60,7 +57,6 @@ viewPokemons: {
     // justifyContent:'space-between',
  
 },
-
 
   inputStyle: {
     height: 40,
@@ -90,14 +86,16 @@ viewPokemons: {
   star:{
     width: 30,
     height : 30,
+    marginLeft :10
+    
   },
 
   pokeball:{
     width: 30,
     height : 30,
-
-  
   },
+
+
 
   textPrincipal:{
     color : "white",
@@ -120,7 +118,11 @@ viewPokemons: {
   contentColum:{
     flexDirection:'row',
     marginLeft : 50
-  }
+  },
+
+  buttonStyle:{
+  marginBottom:10,
+  },
 
 });
 

@@ -26,6 +26,11 @@ export default class Head extends React.Component {
                 color ='white'
                 onPress={() => navigation.toggleDrawer()}
                 />}
+            rightComponent={<Icon
+                name ='home'
+                color ='white'
+                onPress={()=>navigation.navigate('Pokedex')}
+           ></Icon> }
             centerComponent={{ text: 'POKEDEX', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
             containerStyle={{
                 backgroundColor: '#e85050',

@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Button, Text, TextInput, Image, SafeAreaView, ScrollView } from 'react-native';
+import { View, Button, Text, TextInput, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { styles } from './assets/css/Styles'
 import Header from './Head'
+import { AsyncStorage } from 'react-native';
 
 
 export default class Profile extends React.Component {
@@ -12,23 +13,44 @@ export default class Profile extends React.Component {
             name: this.props.route.params.name,
             detailsPokemon: [],
             sprites: {},
-            types: {}
+            types: {},
+            clickFav: false,
+            detailsPokemonFav: [],
+
         }
         this._isMounted = false;
-
     }
+    addWishlist = this.addWishlist.bind(this);
 
     componentDidMount() {
         this._isMounted = true;
         this._isMounted && this.getDetailsPokemon();
+        this._retrieveData();
     }
 
     componentWillUnmount() {
         this._isMounted = false;
+        // this.setState({
+        //     name : '',
+        //     detailsPokemon:[],
+        //     sprites: {},
+        //     types: {},
+        //     clickFav : false
+        // })
+    }
+
+    addWishlist() {
+
+        this.setState({
+            clickFav: true
+        })
+        // this.setState({detailsPokemonFav: [...this.state.detailsPokemonFav, this.state.detailsPokemon]})
+        this.state.detailsPokemonFav.push(this.state.detailsPokemon)
     }
 
     getDetailsPokemon() {
         let n = this.state.name
+        // console.log(n)
         try {
             fetch(`https://pokeapi.co/api/v2/pokemon/${n}`).then((response) => response.json())
                 .then((responseDetailsPokemon) => {
@@ -47,24 +69,86 @@ export default class Profile extends React.Component {
         }
     }
 
+
+    componentDidUpdate() {
+        this._storeData();
+    }
+
+
+
+    _retrieveData = async () => {
+
+
+        try {
+            AsyncStorage.multiGet(["detailsPokemonFav", "clickFav"]).then(response => {
+
+                if (response[0][1] !== null) {
+                    this.setState({
+                        detailsPokemonFav: JSON.parse(response[0][1]),
+
+                    })
+                }
+                // if (response[1][1] != null) {
+                //     this.setState({
+                //         clickFav: response[1][1],
+
+                //     })
+                //     console.log(response[1][1])
+                // }
+            }
+            )
+        } catch (error) {
+            console.log('erreur de récupération')
+        }
+    };
+
+
+
+
+    _storeData = async () => {
+        try {
+            const items = [['detailsPokemonFav', JSON.stringify(this.state.detailsPokemonFav)], ['clickFav', JSON.stringify(this.state.clickFav)]]
+            AsyncStorage.multiSet(items, () => {
+                //to do something
+            });
+
+        } catch (error) {
+            console.log('erreur de sauvegarde')
+        }
+    };
+
     render() {
 
-        const { name, detailsPokemon, sprites, types } = this.state
+        const { name, detailsPokemon, sprites, type, detailsPokemonFav } = this.state
+
+        const imageFavEmptyStar = require('./assets/img/emptyStar.png');
+        const imageFavStar = require('./assets/img/star.png');
+
+
+        // console.log(this.state.clickFav)
         let image = sprites.front_shiny
         const navigation = this.props.navigation
 
-        console.log(detailsPokemon)
+        console.log(detailsPokemonFav)
 
         return (
 
 
 
             <View style={styles.cont} >
-              <Header  style={styles.header} navigation={navigation}></Header>
+                <Header navigation={navigation}></Header>
                 <View style={styles.containerProfile}>
 
+
                     <Image source={{ uri: image }} style={{ width: 150, height: 150 }} />
-                    <Text style={styles.categorie}>{name}  <Image style={styles.star} source={require('./assets/img/emptyStar.png')} /> </Text>
+
+
+
+                    <Text style={styles.categorie}>{name}
+                        <TouchableOpacity onPress={this.addWishlist}  >
+                            {this.state.clickFav == false ? <Image style={styles.star} source={imageFavEmptyStar} /> : <Image style={styles.star} source={imageFavStar} />}
+                        </TouchableOpacity>
+                    </Text>
 
                 </View>
 
