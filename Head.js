@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Button, Text, TextInput,AsyncStorage } from 'react-native';
+import { View, Button, Text, TextInput, AsyncStorage } from 'react-native';
 import { styles } from './assets/css/Styles'
 import { Header, Icon } from 'react-native-elements'
+import firebase from './Firebase';
 
 
 
@@ -10,26 +11,42 @@ export default class Head extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            tabuser: [],
         }
     }
 
+    getUser = this.getUser.bind(this)
+    componentDidMount() {
+        this.getUser();
+    }
 
-    
     clearAsyncStorage = async () => {
         try {
             const keys = await AsyncStorage.getAllKeys();
             await AsyncStorage.multiRemove(keys);
-        } catch (error) {   
+        } catch (error) {
             console.error('Error clearing app data.');
         }
+    }
+
+    getUser() {
+        var user = firebase.auth().currentUser;
+
+        if (user) {
+            this.setState({
+                tabuser: user
+            })
+
+        } else {
+            // No user is signed in.
+        }
+
     }
 
 
 
     render() {
         const navigation = this.props.navigation
-
         return (
             <Header
 
@@ -39,18 +56,12 @@ export default class Head extends React.Component {
                     onPress={() => navigation.toggleDrawer()}
                 />}
                 rightComponent={
-                    <View style={{ flexDirection :'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Icon
                             name='home'
                             color='white'
-                            
-                            onPress={() => navigation.navigate('Pokedex')}
-                        ></Icon>
-                        <Icon 
-                            name='logout'
-                            color='white'
-                            type='material-community'
-                            onPress={this.clearAsyncStorage}
+
+                            onPress={() => navigation.navigate('Pokemons')}
                         ></Icon>
                     </View>
 
@@ -59,7 +70,7 @@ export default class Head extends React.Component {
 
 
 
-                centerComponent={{ text: 'POKEDEX', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
+                centerComponent={{ text: this.props.namePage, style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 containerStyle={{
                     backgroundColor: '#e85050',
                 }}

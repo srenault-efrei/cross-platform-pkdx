@@ -35,9 +35,9 @@ export const styles = StyleSheet.create({
   text: {
    
     fontSize : 25,
-    textAlign: "center", 
     color : '#e85050',
-    fontWeight :'bold'
+    fontWeight :'bold',
+    textDecorationLine : 'underline'
 },
 
 categorie:{
@@ -54,7 +54,8 @@ viewPokemons: {
     borderWidth: 0.5,
     borderColor: 'black',
     padding:10,
-    // justifyContent:'space-between',
+    justifyContent:'space-between',
+    flexDirection:'row'
  
 },
 
@@ -95,7 +96,10 @@ viewPokemons: {
     height : 30,
   },
 
-
+  imagePokemon:{
+    width: 40,
+    height : 40,
+  },
 
   textPrincipal:{
     color : "white",

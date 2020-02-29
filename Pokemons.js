@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Text, TextInput, SafeAreaView, ScrollView, Image, TouchableHighlight, Alert, AsyncStorage } from 'react-native';
+import { View, Button, Text, TextInput, SafeAreaView, ScrollView, Image, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 import { styles } from './assets/css/Styles'
 import Header from './Head'
 import firebase from './Firebase';
@@ -18,15 +18,37 @@ export default class Pokemons extends React.Component {
         }
     }
     // addWishlist  = this.addWishlist.bind(this)
+    getUser = this.getUser.bind(this)
+
+    componentDidUpdate() {
+       
+    }
+
     componentDidMount() {
         this.allPokemons();
-        this._retrieveData();
         this.getUser();
     }
 
+
+    getUser() {
+        var user = firebase.auth().currentUser;
+
+        if (user) {
+            this.setState({
+                user: user
+            })
+
+            console.log(user)
+        } else {
+            // No user is signed in.
+        }
+
+    }
+    
+
     allPokemons() {
         try {
-            fetch('https://pokeapi.co/api/v2/pokemon/?limit=20').then((response) => response.json())
+            fetch('https://pokeapi.co/api/v2/pokemon/?limit=5').then((response) => response.json())
                 .then((pokemons) => {
                     this.setState({
                         pokemons: pokemons.results
@@ -40,30 +62,6 @@ export default class Pokemons extends React.Component {
     }
 
 
-    getUser() {
-        var user = firebase.auth().currentUser;
-
-        if (user) {
-           console.log(user)
-        } else {
-            // No user is signed in.
-        }
-
-    }
-
-    _retrieveData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('user');
-            console.log("récuperation faite")
-            if (value !== null) {
-                this.setState({
-                    user: JSON.parse(value),
-                })
-            }
-        } catch (error) {
-            console.log('erreur de récupération')
-        }
-    };
 
 
     // addWishlist(e, i){ 
@@ -78,10 +76,11 @@ export default class Pokemons extends React.Component {
 
     render() {
 
+       
         const { pokemons, imageIcon, user } = this.state
-        console.log(user)
         // console.log(`${imageIcon}`)
-        const { navigation } = this.props
+        const { navigation,route } = this.props
+        console.log(this.props.route)
         // const test = require('./assets/img/star.png') 
         // const test2 = require('./assets/img/emptyStar.png')
 
@@ -92,7 +91,7 @@ export default class Pokemons extends React.Component {
             <SafeAreaView style={styles.SafeAreaView}>
 
                 <ScrollView style={styles.scrollView}>
-                    <Header navigation={navigation}  ></Header>
+                    <Header navigation={navigation} namePage ='Pokedex' ></Header>
 
 
                     {pokemons.map((pokemon, i) => (
@@ -102,9 +101,11 @@ export default class Pokemons extends React.Component {
                             <Image style={styles.pokeball} source={require('./assets/img/pokeball.png')} />
                             {/* <Text style={styles.text} onPress={() => navigation.navigate('Profile', { name: pokemon.name })} > {pokemon.name}</Text>  */}
                             <Text style={styles.text} onPress={() => navigation.navigate('Profile', { name: pokemon.name })} > {pokemon.name}</Text>
-                            {/* <TouchableOpacity onPress={(e) => {this.addWishlist(e, i)}} >
-                            {this.state.clickedId == i ? <Image    style={styles.star} source={test} /> : <Image    style={styles.star} source={test2} />}
-                            </TouchableOpacity> */}
+                          
+                          {user.uid != null ? <Image style={styles.star} source={require('./assets/img/emptyStar.png')} /> : <Image></Image>}
+                                
+                        
+                        
 
                         </View>
 

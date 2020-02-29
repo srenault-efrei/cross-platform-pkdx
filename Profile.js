@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Button, Text, TextInput, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Button, Text, TextInput, Image, SafeAreaView, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { styles } from './assets/css/Styles'
 import Header from './Head'
 import { AsyncStorage } from 'react-native';
+import Pokemons from './Pokemons';
 
 
 export default class Profile extends React.Component {
@@ -17,17 +18,28 @@ export default class Profile extends React.Component {
             clickFav: false,
             detailsPokemonFav: [],
             user: [],
+            fav: []
 
         }
         this._isMounted = false;
     }
     addWishlist = this.addWishlist.bind(this);
 
+
     componentDidMount() {
         this._isMounted = true;
         this._isMounted && this.getDetailsPokemon();
         this._retrieveData();
+
+
     }
+
+
+    componentDidUpdate() {
+        this._storeData();
+
+    }
+
 
     componentWillUnmount() {
         this._isMounted = false;
@@ -40,13 +52,29 @@ export default class Profile extends React.Component {
         // })
     }
 
-    addWishlist() {
 
-        this.setState({
-            clickFav: true
-        })
-        // this.setState({detailsPokemonFav: [...this.state.detailsPokemonFav, this.state.detailsPokemon]})
-        this.state.detailsPokemonFav.push(this.state.detailsPokemon)
+ 
+
+    addWishlist(pokemon) {
+
+        let boolean = false;
+
+        for (const dpf of this.state.detailsPokemonFav) {
+            if (dpf.id == pokemon.id) {
+                boolean = true
+            }
+        }
+        if (boolean) {
+            alert(pokemon.name + ' est déja dans votre Wishlist.')
+        } else {
+            this.setState({
+                clickFav: true
+            })
+            // this.state.fav.push(pokemon.id)
+            this.state.detailsPokemonFav.push(pokemon)
+        }
+
+        return boolean
     }
 
     getDetailsPokemon() {
@@ -71,17 +99,13 @@ export default class Profile extends React.Component {
     }
 
 
-    componentDidUpdate() {
-        this._storeData();
-    }
-
 
 
     _retrieveData = async () => {
 
 
         try {
-            AsyncStorage.multiGet(["detailsPokemonFav", "user"]).then(response => {
+            AsyncStorage.multiGet(["FinalWishlist", "user","fav"]).then(response => {
 
                 if (response[0][1] !== null) {
                     this.setState({
@@ -92,9 +116,17 @@ export default class Profile extends React.Component {
                 if (response[1][1] != null) {
                     this.setState({
                         user: JSON.parse(response[1][1]),
-                    
+
                     })
-                  
+
+                }
+
+                if (response[2][1] != null) {
+                    this.setState({
+                        fav: JSON.parse(response[2][1]),
+
+                    })
+
                 }
             }
             )
@@ -108,7 +140,7 @@ export default class Profile extends React.Component {
 
     _storeData = async () => {
         try {
-            const items = [['detailsPokemonFav', JSON.stringify(this.state.detailsPokemonFav)], ['clickFav', JSON.stringify(this.state.clickFav)]]
+            const items = [['FinalWishlist', JSON.stringify(this.state.detailsPokemonFav)], ['fav', JSON.stringify(this.state.fav)]]
             AsyncStorage.multiSet(items, () => {
                 //to do something
             });
@@ -118,38 +150,57 @@ export default class Profile extends React.Component {
         }
     };
 
+
+    
     render() {
 
-        const { name, detailsPokemon, sprites, type, detailsPokemonFav,user } = this.state
+        const { name, detailsPokemon, sprites, fav, detailsPokemonFav, user } = this.state
 
         const imageFavEmptyStar = require('./assets/img/emptyStar.png');
         const imageFavStar = require('./assets/img/star.png');
-
+        console.log(fav)
 
         // console.log(this.state.clickFav)
         let image = sprites.front_shiny
         const navigation = this.props.navigation
 
-        console.log(detailsPokemonFav)
-        console.log(user.uid)
+        // console.log(detailsPokemonFav)
+        // console.log(user.uid)
+
 
         return (
 
 
 
-            <View style={styles.cont} >
-                <Header navigation={navigation}></Header>
-                <View style={styles.containerProfile}>
 
+            <View style={styles.cont} >
+                <Header navigation={navigation} namePage='Details'></Header>
+                <View style={styles.containerProfile}>
 
                     <Image source={{ uri: image }} style={{ width: 150, height: 150 }} />
 
 
-
                     <Text style={styles.categorie}>{name}
 
-                        {user.uid != null ? <TouchableOpacity onPress={this.addWishlist}  >{this.state.clickFav == false ? <Image style={styles.star} source={imageFavEmptyStar} /> : <Image style={styles.star} source={imageFavStar} />}</TouchableOpacity>
-                                          :  <TouchableOpacity></TouchableOpacity>
+
+                        {
+                            user.uid != null ?
+                                <TouchableOpacity onPress={() => this.addWishlist(detailsPokemon)}>
+                                    {
+
+                                        this.state.fav.includes(detailsPokemon.id)
+                                            ? <Image style={styles.star} source={imageFavStar} />
+                                            : this.state.clickFav == false
+                                                ?
+                                                <Image style={styles.star} source={imageFavEmptyStar} />
+                                                :
+                                                <Image style={styles.star} source={imageFavStar} />
+
+                                    }
+                                </TouchableOpacity>
+
+                                : <TouchableOpacity>
+                                </TouchableOpacity>
                         }
                     </Text>
 

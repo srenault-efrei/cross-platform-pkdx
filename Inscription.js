@@ -42,7 +42,7 @@ export default class Inscription extends React.Component {
         const { navigation } = this.props
 
         return (
-            <View>
+       
             
                 <View style={styles.container}>
                     <TextInput
@@ -69,7 +69,7 @@ export default class Inscription extends React.Component {
                     ></Button>
 
                 </View>
-            </View>
+          
         );
     }
 }

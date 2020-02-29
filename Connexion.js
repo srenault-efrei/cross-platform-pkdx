@@ -25,7 +25,7 @@ export default class Connexion extends React.Component {
                 .signInWithEmailAndPassword(email, password)
                 .then(res => {
                     AsyncStorage.setItem('user', JSON.stringify(res.user)); 
-                    this.state.navigation.navigate('Pokedex')
+                    this.state.navigation.navigate('Pokemons')
                 })
                 .catch(error => {
                     alert(error.message);
