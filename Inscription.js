@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Button, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { styles } from './assets/css/Styles'
 import Firebase from './Firebase'
-import Header from './Head'
 
 
 
@@ -48,7 +47,7 @@ export default class Inscription extends React.Component {
                     <TextInput
                         onChangeText={login => this.setState({ login })}
                         style={styles.inputStyle}
-                        placeholder='Login'
+                        placeholder='Email'
                         placeholderStye
                     >
                     </TextInput>

@@ -14,13 +14,10 @@ export default class wishlist extends React.Component {
         super(props);
         this.state = {
             detailsPokemonFav: [],
-            user: [],
             sprites: '',
             finalWishlist: [],
-            lastRefresh: Date(Date.now()).toString(),
         }
     }
-    getUser = this.getUser.bind(this)
     deletePokemon = this.deletePokemon.bind(this)
     deleteAll = this.deleteAll.bind(this)
 
@@ -30,7 +27,6 @@ export default class wishlist extends React.Component {
     componentDidMount() {
 
         this._retrieveData();
-        this.getUser();
         this.forceUpdate()
     }
    
@@ -38,33 +34,14 @@ export default class wishlist extends React.Component {
         this._storeData();
     }
 
-    getUser() {
-        var user = firebase.auth().currentUser;
-
-        if (user) {
-            this.setState({
-                user: user
-            })
-
-            // console.log(user)
-        } else {
-            // No user is signed in.
-        }
-
-    }
-
+    
     deletePokemon(i) {
         let finalWishlist = []
         for (const pokemon of this.state.detailsPokemonFav) {
             if (pokemon.id != i) {
                 finalWishlist.push(pokemon)
             }
-            // if (pokemon.id == i) {
-            //     alert(pokemon.name + ' va être supprimé de la wishlist')
-            // }
         }
-
-        // console.log(finalWishlist)
         this.setState({
             detailsPokemonFav: finalWishlist,
             finalWishlist: finalWishlist
@@ -107,11 +84,8 @@ export default class wishlist extends React.Component {
 
     render() {
         const { navigation, route } = this.props
-        const { user, detailsPokemonFav,finalWishlist } = this.state
+        const { detailsPokemonFav,finalWishlist } = this.state
 
-        console.log(route)
-         console.log(detailsPokemonFav)
-         console.log(finalWishlist)
         return (
 
             <SafeAreaView style={styles.SafeAreaView}>

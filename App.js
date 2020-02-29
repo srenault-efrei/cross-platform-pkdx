@@ -27,7 +27,6 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       user: [],
-      compo: '',
     }
   }
   existUser = this.existUser.bind(this)
@@ -90,7 +89,7 @@ export default class App extends React.Component {
       <NavigationContainer>
         <Drawer.Navigator initialRouteName='Pokemons'>
           <Drawer.Screen name='Pokemons' children={this.pokedexScreen} />
-          {/* <Drawer.Screen name='Connexion' children={this.connexionScreen} /> */}
+          <Drawer.Screen name='Connexion' children={this.connexionScreen} />
           <Drawer.Screen name='Wishlist' children={this.existUser} />
         </Drawer.Navigator>
       </NavigationContainer>

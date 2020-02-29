@@ -44,7 +44,7 @@ export default class Connexion extends React.Component {
             <View style={styles.container}>
                 <TextInput
                     style={styles.inputStyle}
-                    placeholder='Login'
+                    placeholder='Email'
                     placeholderStye
                     onChangeText={login => this.setState({ login })}
                 >

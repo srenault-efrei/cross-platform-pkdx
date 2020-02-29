@@ -25,12 +25,10 @@ export default class Profile extends React.Component {
     }
     addWishlist = this.addWishlist.bind(this);
 
-
     componentDidMount() {
         this._isMounted = true;
         this._isMounted && this.getDetailsPokemon();
         this._retrieveData();
-
 
     }
 
@@ -40,20 +38,9 @@ export default class Profile extends React.Component {
 
     }
 
-
     componentWillUnmount() {
         this._isMounted = false;
-        // this.setState({
-        //     name : '',
-        //     detailsPokemon:[],
-        //     sprites: {},
-        //     types: {},
-        //     clickFav : false
-        // })
     }
-
-
- 
 
     addWishlist(pokemon) {
 
@@ -61,7 +48,7 @@ export default class Profile extends React.Component {
 
         for (const dpf of this.state.detailsPokemonFav) {
             if (dpf.id == pokemon.id) {
-                boolean = true
+                boolean = true;
             }
         }
         if (boolean) {
@@ -70,8 +57,10 @@ export default class Profile extends React.Component {
             this.setState({
                 clickFav: true
             })
-            // this.state.fav.push(pokemon.id)
+
             this.state.detailsPokemonFav.push(pokemon)
+            this.state.fav.push(pokemon.id)
+
         }
 
         return boolean
@@ -79,18 +68,14 @@ export default class Profile extends React.Component {
 
     getDetailsPokemon() {
         let n = this.state.name
-        // console.log(n)
         try {
             fetch(`https://pokeapi.co/api/v2/pokemon/${n}`).then((response) => response.json())
                 .then((responseDetailsPokemon) => {
                     this._isMounted && this.setState({
                         detailsPokemon: responseDetailsPokemon,
                         sprites: responseDetailsPokemon.sprites,
-                        types: responseDetailsPokemon.types
-
                     })
                 })
-            // console.log(responseDetailsPokemon)
 
         }
         catch (error) {
@@ -105,7 +90,7 @@ export default class Profile extends React.Component {
 
 
         try {
-            AsyncStorage.multiGet(["FinalWishlist", "user","fav"]).then(response => {
+            AsyncStorage.multiGet(["FinalWishlist", "user", "fav"]).then(response => {
 
                 if (response[0][1] !== null) {
                     this.setState({
@@ -151,27 +136,17 @@ export default class Profile extends React.Component {
     };
 
 
-    
+
     render() {
 
-        const { name, detailsPokemon, sprites, fav, detailsPokemonFav, user } = this.state
+        const { name, detailsPokemon, sprites, fav, detailsPokemonFav, user, types } = this.state
 
         const imageFavEmptyStar = require('./assets/img/emptyStar.png');
         const imageFavStar = require('./assets/img/star.png');
-        console.log(fav)
-
-        // console.log(this.state.clickFav)
         let image = sprites.front_shiny
         const navigation = this.props.navigation
 
-        // console.log(detailsPokemonFav)
-        // console.log(user.uid)
-
-
         return (
-
-
-
 
             <View style={styles.cont} >
                 <Header navigation={navigation} namePage='Details'></Header>
@@ -209,24 +184,9 @@ export default class Profile extends React.Component {
                 <View style={styles.case}>
                     <Text style={styles.textPrincipal} > Informations Principale</Text>
                     <View style={styles.contentColum}>
-                        <Text style={styles.contentPrincipal}> Height:{detailsPokemon.height}</Text>
-                        <Text style={styles.contentPrincipal}> Weight:{detailsPokemon.weight}</Text>
+                        <Text style={styles.contentPrincipal}> id: #{detailsPokemon.id}</Text>
+                        <Text style={styles.contentExperience}> Experience:{detailsPokemon.base_experience}</Text>
                     </View>
-
-
-                    {/* <Text style={styles.contentPrincipal}> Height:{detailsPokemon.height}</Text> */}
-
-                </View>
-
-
-                <View style={styles.case}>
-                    <Text style={styles.textPrincipal} > Attaques principale</Text>
-                    <View style={styles.contentColum}>
-                        <Text style={styles.contentPrincipal}> Height:{detailsPokemon.height}</Text>
-                        <Text style={styles.contentPrincipal}> Weight:{detailsPokemon.weight}</Text>
-                    </View>
-
-                    {/* <Text style={styles.contentPrincipal}> Height:{detailsPokemon.height}</Text> */}
 
                 </View>
 
@@ -234,20 +194,14 @@ export default class Profile extends React.Component {
                 <View style={styles.case}>
                     <Text style={styles.textPrincipal} > Autres Informations</Text>
                     <View style={styles.contentColum}>
-                        <Text style={styles.contentPrincipal}> Height:{detailsPokemon.height}</Text>
-                        <Text style={styles.contentPrincipal}> Weight:{detailsPokemon.weight}</Text>
+                        <Text style={styles.contentPrincipal}> Height: {detailsPokemon.height}</Text>
+                        <Text style={styles.contentPrincipal}> Weight: {detailsPokemon.weight}</Text>
                     </View>
-
-                    {/* <Text style={styles.contentPrincipal}> Height:{detailsPokemon.height}</Text> */}
 
                 </View>
 
+
             </View>
-
-
-
-
-
 
 
         );

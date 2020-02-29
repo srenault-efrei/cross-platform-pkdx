@@ -79,7 +79,6 @@ viewPokemons: {
   borderColor: 'white',
   borderRadius: 10,
   borderBottomWidth: 1,
-  alignSelf:'stretch',
   justifyContent:'center',
   marginBottom: 20
   },
@@ -118,15 +117,26 @@ viewPokemons: {
     fontWeight: "bold",
   
   },
+  
 
   contentColum:{
     flexDirection:'row',
-    marginLeft : 50
+    marginLeft : 1,
+    justifyContent:'space-between'
   },
+
+  contentExperience:{
+    padding : 20,
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign :"center"
+  },
+
 
   buttonStyle:{
   marginBottom:10,
   },
+  
 
 });
 
