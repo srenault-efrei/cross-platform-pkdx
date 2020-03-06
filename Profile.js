@@ -4,6 +4,7 @@ import { styles } from './assets/css/Styles'
 import Header from './Head'
 import { AsyncStorage } from 'react-native';
 import Pokemons from './Pokemons';
+import { Audio } from 'expo-av';
 
 
 export default class Profile extends React.Component {
@@ -18,23 +19,37 @@ export default class Profile extends React.Component {
             clickFav: false,
             detailsPokemonFav: [],
             user: [],
-            fav: []
+            fav: [],
 
         }
         this._isMounted = false;
     }
     addWishlist = this.addWishlist.bind(this);
+    song = this.song.bind(this);
+
 
     componentDidMount() {
+        this.song();
         this._isMounted = true;
         this._isMounted && this.getDetailsPokemon();
         this._retrieveData();
 
     }
 
+    async song() {
+
+        const soundObject = new Audio.Sound();
+        try {
+            await soundObject.loadAsync({ uri: `http://play.pokemonshowdown.com/audio/cries/${this.state.name}.mp3` });
+            await soundObject.playAsync();
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     componentDidUpdate() {
         this._storeData();
+        // this.state.soundObject.pauseAsync();
 
     }
 
@@ -148,62 +163,73 @@ export default class Profile extends React.Component {
 
         return (
 
-            <View style={styles.cont} >
-                <Header navigation={navigation} namePage='Details'></Header>
-                <View style={styles.containerProfile}>
 
-                    <Image source={{ uri: image }} style={{ width: 150, height: 150 }} />
+            <SafeAreaView style={styles.SafeAreaView}>
+
+                <ScrollView style={styles.scrollView}>
+
+                    <View style={styles.cont} >
+                        <Header navigation={navigation} namePage='Details'></Header>
+                        <View style={styles.containerProfile}>
+
+                            <Image source={{ uri: image }} style={{ width: 150, height: 150 }} />
 
 
-                    <Text style={styles.categorie}>{name}
+                            <Text style={styles.categorie}>{name}
 
 
-                        {
-                            user.uid != null ?
-                                <TouchableOpacity onPress={() => this.addWishlist(detailsPokemon)}>
-                                    {
+                                {
+                                    user.uid != null ?
+                                        <TouchableOpacity onPress={() => this.addWishlist(detailsPokemon)}>
+                                            {
 
-                                        this.state.fav.includes(detailsPokemon.id)
-                                            ? <Image style={styles.star} source={imageFavStar} />
-                                            : this.state.clickFav == false
-                                                ?
-                                                <Image style={styles.star} source={imageFavEmptyStar} />
-                                                :
-                                                <Image style={styles.star} source={imageFavStar} />
+                                                this.state.fav.includes(detailsPokemon.id)
+                                                    ? <Image style={styles.star} source={imageFavStar} />
+                                                    : this.state.clickFav == false
+                                                        ?
+                                                        <Image style={styles.star} source={imageFavEmptyStar} />
+                                                        :
+                                                        <Image style={styles.star} source={imageFavStar} />
 
-                                    }
-                                </TouchableOpacity>
+                                            }
+                                        </TouchableOpacity>
 
-                                : <TouchableOpacity>
-                                </TouchableOpacity>
-                        }
-                    </Text>
+                                        : <TouchableOpacity>
+                                        </TouchableOpacity>
+                                }
+                            </Text>
 
-                </View>
+                        </View>
 
-                <View style={styles.case}>
-                    <Text style={styles.textPrincipal} > Informations Principale</Text>
-                    <View style={styles.contentColum}>
-                        <Text style={styles.contentPrincipal}> id: #{detailsPokemon.id}</Text>
-                        <Text style={styles.contentExperience}> Experience:{detailsPokemon.base_experience}</Text>
+                        <View style={styles.case}>
+                            <Text style={styles.textPrincipal} > Informations Principale</Text>
+                            <View style={styles.contentColum}>
+                                <Text style={styles.contentPrincipal}> id: #{detailsPokemon.id}</Text>
+                                <Text style={styles.contentExperience}> Experience:{detailsPokemon.base_experience}</Text>
+                            </View>
+
+                        </View>
+
+
+                        <View style={styles.case}>
+                            <Text style={styles.textPrincipal} > Autres Informations</Text>
+                            <View style={styles.contentColum}>
+                                <Text style={styles.contentPrincipal}> Height: {detailsPokemon.height}</Text>
+                                <Text style={styles.contentPrincipal}> Weight: {detailsPokemon.weight}</Text>
+                            </View>
+
+                        </View>
+
+
                     </View>
 
-                </View>
 
-
-                <View style={styles.case}>
-                    <Text style={styles.textPrincipal} > Autres Informations</Text>
-                    <View style={styles.contentColum}>
-                        <Text style={styles.contentPrincipal}> Height: {detailsPokemon.height}</Text>
-                        <Text style={styles.contentPrincipal}> Weight: {detailsPokemon.weight}</Text>
-                    </View>
-
-                </View>
-
-
-            </View>
+                </ScrollView>
+            </SafeAreaView>
 
 
         );
     }
 }
+
+

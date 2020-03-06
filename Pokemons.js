@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text, TextInput, SafeAreaView, ScrollView, Image } from 'react-native';
 import { styles } from './assets/css/Styles'
 import Header from './Head'
+import { ScreenOrientation } from 'expo';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 
 
@@ -17,12 +20,20 @@ export default class Pokemons extends React.Component {
         }
     }
     handleChange = this.handleChange.bind(this)
+    changeScreenOrientation = this.changeScreenOrientation.bind(this)
+
 
 
     componentDidMount() {
+        this.changeScreenOrientation();
         this.allPokemons();
     }
 
+    async changeScreenOrientation() {
+        console.log(ScreenOrientation)
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.ALL);
+    }
+    
 
     handleChange(name) {
 

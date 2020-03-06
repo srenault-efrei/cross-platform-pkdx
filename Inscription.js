@@ -22,7 +22,6 @@ export default class Inscription extends React.Component {
                 .auth()
                 .createUserWithEmailAndPassword(email, password)
                 .then(user => {
-                    console.log(user);
                     this.state.navigation.navigate('Connexion')
                     Alert.alert('inscription reussi')
                 })

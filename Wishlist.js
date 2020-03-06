@@ -16,25 +16,33 @@ export default class wishlist extends React.Component {
             detailsPokemonFav: [],
             sprites: '',
             finalWishlist: [],
+            navigation: this.props.navigation,
         }
     }
     deletePokemon = this.deletePokemon.bind(this)
     deleteAll = this.deleteAll.bind(this)
 
+    existUser() {
+        let user = firebase.auth().currentUser
+        console.log(user)
+        if (user == null) {
+            this.state.navigation.navigate('Connexion')
+        }
 
-
-    
-    componentDidMount() {
-
-        this._retrieveData();
-        this.forceUpdate()
     }
-   
+
+
+    componentDidMount() {
+        this.existUser();
+        this._retrieveData();
+
+    }
+
     componentDidUpdate() {
         this._storeData();
     }
 
-    
+
     deletePokemon(i) {
         let finalWishlist = []
         for (const pokemon of this.state.detailsPokemonFav) {
@@ -55,7 +63,7 @@ export default class wishlist extends React.Component {
         })
     }
 
-      
+
     _retrieveData = async () => {
         try {
             const value = await AsyncStorage.getItem('FinalWishlist');
@@ -64,7 +72,7 @@ export default class wishlist extends React.Component {
                     detailsPokemonFav: JSON.parse(value),
 
                 })
-               
+
             }
         } catch (error) {
             console.log(error)
@@ -74,17 +82,17 @@ export default class wishlist extends React.Component {
 
     _storeData = async () => {
         try {
-          await AsyncStorage.setItem('FinalWishlist', JSON.stringify( this.state.detailsPokemonFav));
+            await AsyncStorage.setItem('FinalWishlist', JSON.stringify(this.state.detailsPokemonFav));
         } catch (error) {
-          console.log('erreur de sauvegarde')
+            console.log('erreur de sauvegarde')
         }
 
-      };
+    };
 
 
     render() {
         const { navigation, route } = this.props
-        const { detailsPokemonFav,finalWishlist } = this.state
+        const { detailsPokemonFav, finalWishlist } = this.state
 
         return (
 
@@ -92,7 +100,7 @@ export default class wishlist extends React.Component {
 
                 <ScrollView style={styles.scrollView}>
                     <Header navigation={navigation} namePage='Wishlist' ></Header>
-                    <View style={{ flexDirection: "row", justifyContent:"space-between", padding:10 }} >
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", padding: 10 }} >
                         <Button
                             title='Ajouter'
                             color='red'
@@ -106,7 +114,7 @@ export default class wishlist extends React.Component {
                         </Button>
 
                     </View>
-             <Text style={{textAlign:"center"}}> ps: Relancer l'application, si la wishlist n'est pas à jour.</Text>
+                    <Text style={{ textAlign: "center" }}> ps: Relancer l'application, si la wishlist n'est pas à jour.</Text>
 
                     {detailsPokemonFav.map((pokemon, i) => (
 
